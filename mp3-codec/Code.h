@@ -22,7 +22,7 @@ namespace mp3_codec {
 		{
 			InitializeComponent();
 
-			System::String^ path = "D:\\mp3-codec\\mp3-codec\\mp3-codec\\CodeScraper.cpp";
+			System::String^ path = "D:\\test\\mp3-codec\\mp3-codec\\CodeScraper.cpp";
 			CodeScraper^ scraper = gcnew CodeScraper(path, 18, 999);
 			textBox->Lines = scraper->Process()->ToArray();
 		}

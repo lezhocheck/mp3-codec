@@ -82,7 +82,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies />
+      <AdditionalDependencies>winmm.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
@@ -130,19 +130,35 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aplayer.h" />
+    <ClInclude Include="audio.h" />
     <ClInclude Include="Code.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="CodeScraper.h" />
+    <ClInclude Include="compress.h" />
+    <ClInclude Include="g711.h" />
+    <ClInclude Include="imaadpcm.h" />
     <ClInclude Include="Main.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="open.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="wav.h" />
+    <ClInclude Include="winplayer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="aplayer.cpp" />
+    <ClCompile Include="audio.cpp" />
     <ClCompile Include="Code.cpp" />
     <ClCompile Include="CodeScraper.cpp" />
+    <ClCompile Include="compress.cpp" />
+    <ClCompile Include="g711.cpp" />
+    <ClCompile Include="imaadpcm.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="open.cpp" />
+    <ClCompile Include="wav.cpp" />
+    <ClCompile Include="winplayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
@@ -161,6 +177,8 @@
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx" />
+    <EmbeddedResource Include="Resources.uk-UA.resx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

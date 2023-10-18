@@ -1,14 +1,24 @@
 #pragma once
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <msclr/marshal_cppstd.h>
 #include "Code.h"
+#include "open.h"
+#include "winplayer.h"
 
 namespace mp3_codec {
 
 	using namespace System;
+	using namespace System::Globalization;
+	using namespace System::Threading;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
+	using namespace System::Resources;
 	using namespace System::Drawing;
+	using namespace msclr::interop;
 
 	/// <summary>
 	/// Summary for Main
@@ -109,20 +119,23 @@ namespace mp3_codec {
 			// englishToolStripMenuItem
 			// 
 			this->englishToolStripMenuItem->Name = L"englishToolStripMenuItem";
-			this->englishToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->englishToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->englishToolStripMenuItem->Text = L"English";
+			this->englishToolStripMenuItem->Click += gcnew System::EventHandler(this, &Main::englishToolStripMenuItem_Click);
 			// 
 			// ukrainianToolStripMenuItem
 			// 
 			this->ukrainianToolStripMenuItem->Name = L"ukrainianToolStripMenuItem";
-			this->ukrainianToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->ukrainianToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->ukrainianToolStripMenuItem->Text = L"Ukrainian";
+			this->ukrainianToolStripMenuItem->Click += gcnew System::EventHandler(this, &Main::ukrainianToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
 			this->exitToolStripMenuItem->Size = System::Drawing::Size(38, 20);
 			this->exitToolStripMenuItem->Text = L"Exit";
+			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &Main::exitToolStripMenuItem_Click);
 			// 
 			// button1
 			// 
@@ -189,7 +202,43 @@ namespace mp3_codec {
 			if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 			{
 				textBox1->Text = dialog->FileName;
+				std::string path = marshal_as<std::string>(dialog->FileName);
+				std::ifstream input(path, std::ios::in | std::ios::binary);
+				if (!input.is_open()) {
+					return;
+				}
+				AudioAbstract* audioFile = OpenFormat(input);
+				if (audioFile) {
+					WinPlayer player(audioFile);
+					player.Play();
+					delete audioFile;
+				}
 			}
 		}
-	};
+	
+		System::Void englishToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+			Thread::CurrentThread->CurrentUICulture = CultureInfo::CreateSpecificCulture("en-US");
+			SetupResources();
+		}
+		System::Void ukrainianToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+			Thread::CurrentThread->CurrentUICulture = CultureInfo::CreateSpecificCulture("uk-UA");
+			SetupResources();
+		}
+
+		void SetupResources() {
+			ResourceManager^ rm = gcnew ResourceManager("mp3_codec.Resources", GetType()->Assembly);
+			codeToolStripMenuItem->Text = rm->GetString("code");
+			fileToolStripMenuItem->Text = rm->GetString("file");
+			languageToolStripMenuItem->Text = rm->GetString("language");
+			exitToolStripMenuItem->Text = rm->GetString("exit");
+			englishToolStripMenuItem->Text = rm->GetString("english");
+			ukrainianToolStripMenuItem->Text = rm->GetString("ukrainian");
+			button1->Text = rm->GetString("open");
+		}
+
+		
+		System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+			Application::Exit();
+		}
+};
 }
