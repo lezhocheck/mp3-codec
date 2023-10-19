@@ -16,7 +16,7 @@ private:
 
     // Allow the callback to see our members 
     friend void CALLBACK WaveOutCallback(HWAVEOUT hwo, UINT uMsg,
-        DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
+        DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 
     // The callback function defined above is just a wrapper that
     // invokes this method

@@ -54,6 +54,11 @@ namespace mp3_codec {
 
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::ComponentModel::BackgroundWorker^ backgroundWorker;
+	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::Button^ button3;
+	private: System::Windows::Forms::Button^ button4;
+	private: System::Windows::Forms::Button^ button5;
 
 
 	private:
@@ -78,6 +83,11 @@ namespace mp3_codec {
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->backgroundWorker = (gcnew System::ComponentModel::BackgroundWorker());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->button4 = (gcnew System::Windows::Forms::Button());
+			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -119,14 +129,14 @@ namespace mp3_codec {
 			// englishToolStripMenuItem
 			// 
 			this->englishToolStripMenuItem->Name = L"englishToolStripMenuItem";
-			this->englishToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->englishToolStripMenuItem->Size = System::Drawing::Size(124, 22);
 			this->englishToolStripMenuItem->Text = L"English";
 			this->englishToolStripMenuItem->Click += gcnew System::EventHandler(this, &Main::englishToolStripMenuItem_Click);
 			// 
 			// ukrainianToolStripMenuItem
 			// 
 			this->ukrainianToolStripMenuItem->Name = L"ukrainianToolStripMenuItem";
-			this->ukrainianToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->ukrainianToolStripMenuItem->Size = System::Drawing::Size(124, 22);
 			this->ukrainianToolStripMenuItem->Text = L"Ukrainian";
 			this->ukrainianToolStripMenuItem->Click += gcnew System::EventHandler(this, &Main::ukrainianToolStripMenuItem_Click);
 			// 
@@ -158,11 +168,61 @@ namespace mp3_codec {
 			this->textBox1->Size = System::Drawing::Size(179, 20);
 			this->textBox1->TabIndex = 3;
 			// 
+			// backgroundWorker
+			// 
+			this->backgroundWorker->DoWork += gcnew System::ComponentModel::DoWorkEventHandler(this, &Main::backgroundWorker_DoWork);
+			this->backgroundWorker->RunWorkerCompleted += gcnew System::ComponentModel::RunWorkerCompletedEventHandler(this, &Main::backgroundWorker_RunWorkerCompleted);
+			// 
+			// button2
+			// 
+			this->button2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->button2->Location = System::Drawing::Point(12, 82);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(260, 23);
+			this->button2->TabIndex = 4;
+			this->button2->Text = L"Play WAV file";
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &Main::button2_Click);
+			// 
+			// button3
+			// 
+			this->button3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->button3->Location = System::Drawing::Point(12, 119);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(260, 23);
+			this->button3->TabIndex = 5;
+			this->button3->Text = L"Convert to MP3";
+			this->button3->UseVisualStyleBackColor = true;
+			// 
+			// button4
+			// 
+			this->button4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->button4->Location = System::Drawing::Point(12, 160);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(260, 23);
+			this->button4->TabIndex = 6;
+			this->button4->Text = L"Play MP3 file";
+			this->button4->UseVisualStyleBackColor = true;
+			// 
+			// button5
+			// 
+			this->button5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->button5->Location = System::Drawing::Point(12, 201);
+			this->button5->Name = L"button5";
+			this->button5->Size = System::Drawing::Size(260, 23);
+			this->button5->TabIndex = 7;
+			this->button5->Text = L"Save MP3 file";
+			this->button5->UseVisualStyleBackColor = true;
+			// 
 			// Main
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->button5);
+			this->Controls->Add(this->button4);
+			this->Controls->Add(this->button3);
+			this->Controls->Add(this->button2);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->menuStrip1);
@@ -202,17 +262,8 @@ namespace mp3_codec {
 			if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 			{
 				textBox1->Text = dialog->FileName;
-				std::string path = marshal_as<std::string>(dialog->FileName);
-				std::ifstream input(path, std::ios::in | std::ios::binary);
-				if (!input.is_open()) {
-					return;
-				}
-				AudioAbstract* audioFile = OpenFormat(input);
-				if (audioFile) {
-					WinPlayer player(audioFile);
-					player.Play();
-					delete audioFile;
-				}
+				Code^ codeForm = Code::GetInstance();
+				codeForm->SetLinesFromFile("wav.cpp", 0, 999);
 			}
 		}
 	
@@ -239,6 +290,32 @@ namespace mp3_codec {
 		
 		System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 			Application::Exit();
+		}
+		
+		System::Void backgroundWorker_DoWork(System::Object^ sender, System::ComponentModel::DoWorkEventArgs^ e) {
+			String^ str = Convert::ToString(e->Argument);
+			std::string path = marshal_as<std::string>(str);
+			std::ifstream input(path, std::ios::in | std::ios::binary);
+			if (!input.is_open()) {
+				return;
+			}
+			AudioAbstract* audioFile = OpenFormat(input);
+			if (audioFile) {
+				WinPlayer player(audioFile);
+
+				player.Play();
+				delete audioFile;
+			}
+		}
+		System::Void backgroundWorker_RunWorkerCompleted(System::Object^ sender, System::ComponentModel::RunWorkerCompletedEventArgs^ e) {
+		
+		}
+		System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+			if (!backgroundWorker->IsBusy) {
+				Code^ codeForm = Code::GetInstance();
+				codeForm->SetLinesFromFile("winplayer.cpp", 0, 999);
+				backgroundWorker->RunWorkerAsync(textBox1->Text);
+			}
 		}
 };
 }

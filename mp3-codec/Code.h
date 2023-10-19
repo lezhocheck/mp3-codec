@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include "CodeScraper.h"
 
 
@@ -21,10 +22,7 @@ namespace mp3_codec {
 		Code(void)
 		{
 			InitializeComponent();
-
-			System::String^ path = "D:\\test\\mp3-codec\\mp3-codec\\CodeScraper.cpp";
-			CodeScraper^ scraper = gcnew CodeScraper(path, 18, 999);
-			textBox->Lines = scraper->Process()->ToArray();
+			SetLinesFromFile("wav.cpp", 0, 999);
 		}
 
 		static Code^ GetInstance()
@@ -34,6 +32,16 @@ namespace mp3_codec {
 				instance = gcnew Code();
 			}
 			return instance;
+		}
+
+		void SetLinesFromFile(System::String^ fileName, int startLine, int endLine) {
+			System::String^ path = System::IO::Directory::GetCurrentDirectory() + "/" + fileName;
+			if (!System::IO::File::Exists(path)) {
+				throw std::invalid_argument("Invalid file local path provided");
+			}
+			CodeScraper^ scraper = gcnew CodeScraper(path, startLine, endLine);
+			this->Text = fileName;
+			textBox->Lines = scraper->Process()->ToArray();
 		}
 
 	protected:

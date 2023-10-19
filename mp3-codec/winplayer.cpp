@@ -52,7 +52,7 @@ void WinPlayer::Play(void) {
 }
 // CallBack
 void CALLBACK WaveOutCallback(HWAVEOUT hwo, UINT uMsg,
-    DWORD dwInstance, DWORD dwParam1, DWORD dwParam2) {
+    DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
     WinPlayer* me = reinterpret_cast<WinPlayer*>(dwInstance);
     switch (uMsg) {
     case WOM_DONE: // Done with this buffer
@@ -223,9 +223,10 @@ int WinPlayer::SelectDevice(void) {
     SetSamplingRateRecursive(ratePreferred);
 
     // Open the matching device
+
     MMRESULT err2 = waveOutOpen(&_device, matchingDevice,
-        &waveFormat, reinterpret_cast<DWORD>(WaveOutCallback),
-        reinterpret_cast<DWORD>(this), CALLBACK_FUNCTION);
+        &waveFormat, reinterpret_cast<DWORD_PTR>(WaveOutCallback),
+        reinterpret_cast<DWORD_PTR>(this), CALLBACK_FUNCTION);
 
     if (err2) {
         cerr << "Couldn't open WAVE output device.\n";
