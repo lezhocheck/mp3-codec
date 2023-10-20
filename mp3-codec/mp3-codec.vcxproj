@@ -142,6 +142,7 @@
     <ClInclude Include="Main.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="mpeg.h" />
     <ClInclude Include="open.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="wav.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="g711.cpp" />
     <ClCompile Include="imaadpcm.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="mpeg.cpp" />
     <ClCompile Include="open.cpp" />
     <ClCompile Include="wav.cpp" />
     <ClCompile Include="winplayer.cpp" />
@@ -178,7 +180,9 @@
       <DependentUpon>Main.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx" />
-    <EmbeddedResource Include="Resources.uk-UA.resx" />
+    <EmbeddedResource Include="Resources.uk-UA.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
