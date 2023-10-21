@@ -1,7 +1,7 @@
 #pragma once
 #include "audio.h"
 #include "compress.h"
-#include<sstream>
+#include <sstream>
 
 
 class DecompressMpeg : public AbstractDecompressor {
@@ -78,4 +78,4 @@ public:
 	void MinMaxSamplingRate(long* min, long* max, long
 		* preferred);
 	void MinMaxChannels(int* min, int* max, int* preferred);
-};
+};	

@@ -120,6 +120,9 @@
   <data name="code" xml:space="preserve">
     <value>Код</value>
   </data>
+  <data name="encodeWav" xml:space="preserve">
+    <value>Декодувати у WAV</value>
+  </data>
   <data name="english" xml:space="preserve">
     <value>Англійська</value>
   </data>
@@ -134,6 +137,12 @@
   </data>
   <data name="open" xml:space="preserve">
     <value>Відкрити</value>
+  </data>
+  <data name="playMpeg" xml:space="preserve">
+    <value>Програти MPEG файл</value>
+  </data>
+  <data name="saveWav" xml:space="preserve">
+    <value>Зберегти WAV</value>
   </data>
   <data name="ukrainian" xml:space="preserve">
     <value>Українська</value>
