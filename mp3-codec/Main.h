@@ -6,6 +6,7 @@
 #include "Code.h"
 #include "open.h"
 #include "winplayer.h"
+#include "mpeg.h" 
 
 namespace mp3_codec {
 
@@ -56,9 +57,13 @@ namespace mp3_codec {
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::ComponentModel::BackgroundWorker^ backgroundWorker;
 	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::RichTextBox^ fileInfo;
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button4;
-	private: System::Windows::Forms::Button^ button5;
+
+
+
+
 
 
 	private:
@@ -85,9 +90,9 @@ namespace mp3_codec {
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->backgroundWorker = (gcnew System::ComponentModel::BackgroundWorker());
 			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->fileInfo = (gcnew System::Windows::Forms::RichTextBox());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
-			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -176,59 +181,58 @@ namespace mp3_codec {
 			// button2
 			// 
 			this->button2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->button2->Location = System::Drawing::Point(12, 82);
+			this->button2->Location = System::Drawing::Point(12, 154);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(260, 23);
 			this->button2->TabIndex = 4;
-			this->button2->Text = L"Play WAV file";
+			this->button2->Text = L"Play MPEG file";
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &Main::button2_Click);
+			// 
+			// fileInfo
+			// 
+			this->fileInfo->Location = System::Drawing::Point(12, 69);
+			this->fileInfo->Name = L"fileInfo";
+			this->fileInfo->ReadOnly = true;
+			this->fileInfo->Size = System::Drawing::Size(260, 79);
+			this->fileInfo->TabIndex = 5;
+			this->fileInfo->Text = L"";
 			// 
 			// button3
 			// 
 			this->button3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->button3->Location = System::Drawing::Point(12, 119);
+			this->button3->Location = System::Drawing::Point(12, 183);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(260, 23);
-			this->button3->TabIndex = 5;
-			this->button3->Text = L"Convert to MP3";
+			this->button3->TabIndex = 6;
+			this->button3->Text = L"Encode to WAV";
 			this->button3->UseVisualStyleBackColor = true;
 			// 
 			// button4
 			// 
 			this->button4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->button4->Location = System::Drawing::Point(12, 160);
+			this->button4->Location = System::Drawing::Point(12, 212);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(260, 23);
-			this->button4->TabIndex = 6;
-			this->button4->Text = L"Play MP3 file";
+			this->button4->TabIndex = 7;
+			this->button4->Text = L"Save WAV file";
 			this->button4->UseVisualStyleBackColor = true;
-			// 
-			// button5
-			// 
-			this->button5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->button5->Location = System::Drawing::Point(12, 201);
-			this->button5->Name = L"button5";
-			this->button5->Size = System::Drawing::Size(260, 23);
-			this->button5->TabIndex = 7;
-			this->button5->Text = L"Save MP3 file";
-			this->button5->UseVisualStyleBackColor = true;
 			// 
 			// Main
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
-			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
+			this->Controls->Add(this->fileInfo);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"Main";
-			this->Text = L"wav2mp3";
+			this->Text = L"mpeg";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			this->ResumeLayout(false);
@@ -255,7 +259,7 @@ namespace mp3_codec {
 			Stream^ myStream;
 			OpenFileDialog^ dialog = gcnew OpenFileDialog;
 			dialog->InitialDirectory = "c:\\";
-			dialog->Filter = "WAV files (*.wav)|*.wav";
+			dialog->Filter = "MP2 files (*.mp2)|*.mp2";;
 			dialog->FilterIndex = 2;
 			dialog->RestoreDirectory = true;
 
@@ -264,6 +268,20 @@ namespace mp3_codec {
 				textBox1->Text = dialog->FileName;
 				Code^ codeForm = Code::GetInstance();
 				codeForm->SetLinesFromFile("wav.cpp", 0, 999);
+
+				std::string path = marshal_as<std::string>(textBox1->Text);
+				std::ifstream input(path, std::ios::in | std::ios::binary);
+				if (!input.is_open()) {
+					return;
+				}
+				if (!IsMpegFile(input)) {
+					MessageBox::Show("Not an MPEG file", "Error",
+						MessageBoxButtons::OK, MessageBoxIcon::Error);
+					return;
+				}
+				std::ostringstream log;
+				MpegRead audioFile(input, log);
+				fileInfo->Text = gcnew String(log.str().c_str());
 			}
 		}
 	
@@ -299,7 +317,13 @@ namespace mp3_codec {
 			if (!input.is_open()) {
 				return;
 			}
-			AudioAbstract* audioFile = OpenFormat(input);
+			if (!IsMpegFile(input)) {
+				MessageBox::Show("Not an MPEG file", "Error", 
+					MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+			std::ostringstream out;
+			AudioAbstract* audioFile = new MpegRead(input, out);
 			if (audioFile) {
 				WinPlayer player(audioFile);
 

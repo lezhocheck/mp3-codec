@@ -831,7 +831,7 @@ void DecompressMpeg::Layer3Decode() {
 	exit(1);
 }
 
-DecompressMpeg::DecompressMpeg(AudioAbstract& a)
+DecompressMpeg::DecompressMpeg(AudioAbstract& a, std::ostringstream& out)
 	:AbstractDecompressor(a) {
 	_samplesRemaining = 0;
 	_buffer = _bufferStorage + sizeof(_bufferStorage);
@@ -856,37 +856,36 @@ DecompressMpeg::DecompressMpeg(AudioAbstract& a)
 
 	NextFrame(); // Читаем первый фрейм
 	// Кодировка: MPEG-.
-	cerr << "Encoding: MPEG-" << ((_id == 0) ? "2" : "1");
+	out << "Encoding: MPEG-" << ((_id == 0) ? "2" : "1") << "\n";
 	// Уровень.
-	cerr << " Layer " << static_cast<int>(_layer);
-	cerr << "\n";
+	out << "Layer " << static_cast<unsigned int>(_layer);
+	out << "\n";
 	// Частота дискретизации.
-	cerr << "Sampling Rate: " << _samplingRate << "\n";
+	out << "Sampling Rate: " << static_cast<unsigned int>(_samplingRate) << "\n";
 	switch (_mode) {
 		// Тип: Стерео.
-	case 0: cerr << "Mode: Stereo\n"; break;
+	case 0: out << "Mode: Stereo\n"; break;
 		// Тип: Объединенный стерео.
-	case 1: cerr << "Mode: Joint Stereo\n"; break;
+	case 1: out << "Mode: Joint Stereo\n"; break;
 		// Тип: Двухканальный.
-	case 2: cerr << "Mode: Dual Channel\n"; break;
+	case 2: out << "Mode: Dual Channel\n"; break;
 		// Тип: Одноканальный.
-	case 3: cerr << "Mode: Single Channel\n"; break;
+	case 3: out << "Mode: Single Channel\n"; break;
 	}
 	// Скорость передачи битов.
-	cerr << "Bitrate: " << _bitRate << "\n";
+	out << "Bitrate: " << static_cast<unsigned int>(_bitRate) << "\n";
 	switch (_emphasis) {
 		// Предыскажение: нет.
-	case 0: cerr << "Emphasis: none\n"; break;
+	case 0: out << "Emphasis: none\n"; break;
 		// Предыскажение: 50/15.
-	case 1: cerr << "Emphasis: 50/15\n"; break;
+	case 1: out << "Emphasis: 50/15\n"; break;
 		// Предыскажение: зарезервировано.
-	case 2: cerr << "Emphasis: reserved\n"; break;
+	case 2: out << "Emphasis: reserved\n"; break;
 		// Предыскажение: ITU J.17.
-	case 3: cerr << "Emphasis: ITU J.17\n"; break;
+	case 3: out << "Emphasis: ITU J.17\n"; break;
 	}
 	// Степень сжатия (приблизительно):
-	fprintf(stderr, "Approximate Compression Ratio: %5.1f:1\n",
-		_samplingRate * 16.0 * _channels / _bitRate);
+	out << "Approximate Compression Ratio: " << _samplingRate * 16.0 * _channels / _bitRate << "\n";
 }
 
 DecompressMpeg::~DecompressMpeg() {
@@ -904,11 +903,11 @@ bool IsMpegFile(istream& file) {
 	if ((magic & 0xFFF0) == 0xFFF0) return true;
 	else return false;
 }
-MpegRead::MpegRead(istream& input) :AudioAbstract(), _stream(input)
+MpegRead::MpegRead(istream& input, std::ostringstream& log) :AudioAbstract(), _stream(input)
 {
 	// Формат файла: MPEG
-	cerr << "File Format: MPEG\n";
-	_decoder = new DecompressMpeg(*this);
+	log << "File Format: MPEG\n";
+	_decoder = new DecompressMpeg(*this, log);
 }
 
 MpegRead::~MpegRead() {

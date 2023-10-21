@@ -1,10 +1,10 @@
-#ifndef MPEG_H_INCLUDED
-#define MPEG_H_INCLUDED
+#pragma once
 #include "audio.h"
 #include "compress.h"
+#include<sstream>
+
 
 class DecompressMpeg : public AbstractDecompressor {
-private:
 private:
 	void FillBuffer(); // Поддержка буферов данных
 	// в заполненном состоянии.
@@ -17,8 +17,6 @@ private:
 	AudioByte* _bufferEnd; // Конец области активных данных
 	// в буфере.
 	AudioByte* _header; // Положение заголовка в буфере.
-
-private:
 	bool ParseHeader(); // Разбор заголовка очередного фрейма.
 	char _id; // 1 для MPEG-1, 0 для расширений MPEG-2.
 	char _layer;
@@ -39,7 +37,6 @@ private:
 	int _channels; // Количество каналов.
 	int _headerSpacing; // B байтах.
 
-private:
 	long* _V[2][16]; // Синтезируемый интервал для левого/
 	// правого каналов.
 	void Layerl2Synthesis(long* V[16], long* in, int inSamples,	AudioSample* out);
@@ -55,7 +52,7 @@ private:
 	void NextFrame(); // Чтение и декомпрессия
 	// очередного фрейма.
 public:
-	DecompressMpeg(AudioAbstract& a);
+	DecompressMpeg(AudioAbstract& a, std::ostringstream& cerr);
 	~DecompressMpeg();
 	size_t GetSamples(AudioSample* outBuff, size_t len);
 	void MinMaxSamplingRate(long* min, long* max, long* preferred)
@@ -70,11 +67,11 @@ public:
 bool IsMpegFile(istream& file);
 
 class MpegRead : public AudioAbstract {
-private:
+public:
 	istream& _stream;
 	AbstractDecompressor* _decoder;
 public:
-	MpegRead(istream& input = cin);
+	MpegRead(istream& input, std::ostringstream& log);
 	~MpegRead();
 	size_t GetSamples(AudioSample* buffer, size_t numSamples);
 	size_t ReadBytes(AudioByte* buffer, size_t length);
@@ -82,5 +79,3 @@ public:
 		* preferred);
 	void MinMaxChannels(int* min, int* max, int* preferred);
 };
-
-#endif

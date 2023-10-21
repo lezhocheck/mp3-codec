@@ -1,6 +1,7 @@
 #include "open.h"
 
-#include "wav.h"  // Microsoft RIFF WAVE
+#include "wav.h"  
+#include "mpeg.h" 
 
 AudioAbstract* OpenFormat(istream& file) {
 	if (IsWaveFile(file)) {

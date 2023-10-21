@@ -5,9 +5,11 @@ using namespace System::Globalization;
 using namespace System::Threading;
 using namespace System::Windows::Forms;
 
+
 [STAThread]
 int main()
 {
+
 	Thread::CurrentThread->CurrentUICulture = CultureInfo::CreateSpecificCulture("en-US");
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
