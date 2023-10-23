@@ -1,7 +1,7 @@
 #pragma once
 #include <filesystem>
 #include "CodeScraper.h"
-
+#include "paginator.h"
 
 namespace mp3_codec {
 
@@ -18,11 +18,17 @@ namespace mp3_codec {
 	/// </summary>
 	public ref class Code : public System::Windows::Forms::Form
 	{
+	private: 
+		Paginator^ paginator;
 	public:
 		Code(void)
 		{
 			InitializeComponent();
-			SetLinesFromFile("wav.cpp", 0, 999);
+			paginator = gcnew Paginator();
+			paginator->add("mpeg.cpp", 762, 804);
+			paginator->add("mpeg.cpp", 602, 756);
+			paginator->add("mpeg.cpp", 485, 601);
+			textBox->Text = paginator->displayCurrentPage();
 		}
 
 		static Code^ GetInstance()
@@ -34,14 +40,9 @@ namespace mp3_codec {
 			return instance;
 		}
 
-		void SetLinesFromFile(System::String^ fileName, int startLine, int endLine) {
-			System::String^ path = System::IO::Directory::GetCurrentDirectory() + "/" + fileName;
-			if (!System::IO::File::Exists(path)) {
-				throw std::invalid_argument("Invalid file local path provided");
-			}
-			CodeScraper^ scraper = gcnew CodeScraper(path, startLine, endLine);
-			this->Text = fileName;
-			textBox->Lines = scraper->Process()->ToArray();
+		void SetPaginator(Paginator^ paginator) {
+			this->paginator = paginator;
+			textBox->Text = paginator->displayCurrentPage();
 		}
 
 	protected:
@@ -62,6 +63,8 @@ namespace mp3_codec {
 		/// </summary>
 		System::ComponentModel::Container ^components;
 	private: System::Windows::Forms::RichTextBox^ textBox;
+	private: System::Windows::Forms::Button^ nextButton;
+	private: System::Windows::Forms::Button^ prevButton;
 
 		   static Code^ instance = nullptr;
 
@@ -72,26 +75,55 @@ namespace mp3_codec {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->textBox = gcnew System::Windows::Forms::RichTextBox();
+			this->textBox = (gcnew System::Windows::Forms::RichTextBox());
+			this->nextButton = (gcnew System::Windows::Forms::Button());
+			this->prevButton = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox
 			// 
-			this->textBox->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->textBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+				| System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->textBox->Font = (gcnew System::Drawing::Font(L"Consolas", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->textBox->Location = System::Drawing::Point(0, 0);
+			this->textBox->Margin = System::Windows::Forms::Padding(0);
 			this->textBox->Name = L"textBox";
 			this->textBox->ReadOnly = true;
-			this->textBox->Size = System::Drawing::Size(284, 261);
+			this->textBox->Size = System::Drawing::Size(285, 213);
 			this->textBox->TabIndex = 0;
 			this->textBox->Text = L"";
+			// 
+			// nextButton
+			// 
+			this->nextButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
+			this->nextButton->Location = System::Drawing::Point(197, 226);
+			this->nextButton->Name = L"nextButton";
+			this->nextButton->Size = System::Drawing::Size(75, 23);
+			this->nextButton->TabIndex = 1;
+			this->nextButton->Text = L"Next";
+			this->nextButton->UseVisualStyleBackColor = true;
+			this->nextButton->Click += gcnew System::EventHandler(this, &Code::nextButton_Click);
+			// 
+			// prevButton
+			// 
+			this->prevButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
+			this->prevButton->Location = System::Drawing::Point(116, 226);
+			this->prevButton->Name = L"prevButton";
+			this->prevButton->Size = System::Drawing::Size(75, 23);
+			this->prevButton->TabIndex = 2;
+			this->prevButton->Text = L"Previous";
+			this->prevButton->UseVisualStyleBackColor = true;
+			this->prevButton->Click += gcnew System::EventHandler(this, &Code::prevButton_Click);
 			// 
 			// Code
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);
+			this->Controls->Add(this->prevButton);
+			this->Controls->Add(this->nextButton);
 			this->Controls->Add(this->textBox);
 			this->Name = L"Code";
 			this->Text = L"code";
@@ -100,5 +132,13 @@ namespace mp3_codec {
 		}
 
 #pragma endregion
-	};
+	System::Void nextButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		paginator->nextPage();
+		textBox->Text = paginator->displayCurrentPage();
+	}
+	System::Void prevButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		paginator->previousPage();
+		textBox->Text = paginator->displayCurrentPage();
+	}
+};
 }

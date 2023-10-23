@@ -50,6 +50,7 @@ void WinPlayer::Play(void) {
         delete[] waveHdr[i1].lpData;
     }
 }
+
 // CallBack
 void CALLBACK WaveOutCallback(HWAVEOUT hwo, UINT uMsg,
     DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
@@ -96,6 +97,7 @@ void WinPlayer::NextBuff(WAVEHDR* pWaveHdr) {
         pWaveHdr->dwFlags |= WHDR_DONE; // Mark buffer as finished
     }
 }
+
 // These are the primary formats supported by Windows
 static struct {
     DWORD format; // Constant

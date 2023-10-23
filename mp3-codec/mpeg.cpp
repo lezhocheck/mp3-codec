@@ -101,7 +101,7 @@ long DecompressMpeg::GetBits(int numBits) {
 	return result | GetBits(numBits);
 }
 
-static short bitRateTable[2][4][16] = { // ID, Уровень, код.
+static short bitRateTable[2][4][16] = { 
 	{ 
 		{0 }, 
 		{0,32,48,56,64,80,96,112,128,144,160,176,192,224,256,0 },
@@ -122,18 +122,16 @@ static long samplingRateTable[2][4] = {
 };
 
 bool DecompressMpeg::ParseHeader() {
-	FillBuffer(); // Заполняем буфер.
+	FillBuffer(); 
 	if (_bufferEnd - _header < 4)
-		return true; // Больше нет фреймов.
+		return true;
 	if ((_header[0] != 0xFF) || ((_header[1] & 0xF0) != 0xF0)) {
-		// Синхрогруппа не найдена.
 		cerr << "Syncword not found.";
-		return true; // Больше нет фреймов.
+		return true; 
 	}
-	_id = (_header[1] & 8) >> 3; // 1 для MPEG-1,
-	// 0 для MPEG-2
-	_layer = -(_header[1] >> 1) & 3; // Декодируем
-	_protection = (~_header[1] & 1); // 0->CRC, 1->нет CRC
+	_id = (_header[1] & 8) >> 3; 
+	_layer = -(_header[1] >> 1) & 3; 
+	_protection = (~_header[1] & 1); 
 	int bitrateIndex = (_header[2] & 0xF0) >> 4;
 	_bitRate = bitRateTable[_id][_layer][bitrateIndex] * 1000;
 	int samplingRateIndex = (_header[2] & 0x0C) >> 2;
@@ -143,21 +141,19 @@ bool DecompressMpeg::ParseHeader() {
 	_mode = (_header[3] & 0xC0) >> 6;
 	_modeExtension = (_header[3] & 0x30) >> 4;
 	switch (_mode) {
-	case 0: // Стерео: все поддиапазоны.
+	case 0: 
 		_channels = 2;
 		_bound = 32;
 		break;
-	case 1: // Объединенное стерео: в части
-		// поддиапазонов используется
-		// кодирование интенсивности.
+	case 1:
 		_channels = 2;
 		_bound = (_modeExtension + 1) << 2;
 		break;
-	case 2: // Двухканальное: два независимых канала.
+	case 2: 
 		_channels = 2;
 		_bound = 32;
 		break;
-	case 3: // Одноканальное.
+	case 3: 
 		_channels = 1;
 		_bound = 0;
 		break;
@@ -166,22 +162,20 @@ bool DecompressMpeg::ParseHeader() {
 	_original = (_header[3] & 0x04);
 	_emphasis = (_header[3] & 0x03);
 	_buffer = _header + 4;
-	if (_protection) _buffer += 2; // Skip 2-byte CRC
+	if (_protection) _buffer += 2; 
 
-	if (_bitRate == 0) { // Нестандартная скорость передачи битов.
-		if (_headerSpacing) { // Расстояние между заголовками
-			// уже известно.
-			if (_layer == 1) { // Для Layer 1 страница содержит 4 байта.
+	if (_bitRate == 0) { 
+		if (_headerSpacing) { 
+			if (_layer == 1) { 
 				_header += _headerSpacing * 4;
 				if (_padding) _header += 4;
 			}
-			else { // Для Layer 2 и Layer 3 страница
-				// содержит 1 байт.
+			else { 
 				_header += _headerSpacing;
 				if (_padding) _header += 1;
 			}
 		}
-		else { // Нужно искать следующий заголовок.
+		else { 
 			int slotLength = (_layer == 1) ? 4 : 1;
 			_headerSpacing = 1;
 			_header += slotLength;
@@ -192,27 +186,26 @@ bool DecompressMpeg::ParseHeader() {
 			if (_padding) _headerSpacing--;
 		}
 	}
-	else if (_layer == 1) { // Для Layer 1 страница состоит
-		// из четырех байт.
-		_headerSpacing = // Страниц в пакете =.
-			384 // Отсчетов в пакете.
-			/ 32 // Битов в странице.
-			* _bitRate // Битов за секунду.
-			/ _samplingRate; // Отсчетов за секунду.
-		_header += _headerSpacing * 4; // 4 байта на страницу.
-		if (_padding) _header += 4; // Дополнительная страница.
+	else if (_layer == 1) { 
+		_headerSpacing = 
+			384 
+			/ 32 
+			* _bitRate 
+			/ _samplingRate; 
+		_header += _headerSpacing * 4; 
+		if (_padding) _header += 4; 
 	}
 	else {
 		_headerSpacing =
-			1152 // Отсчетов в пакете.
-			/ 8 // Битов в странице.
-			* _bitRate // Битов за секунду.
-			/ _samplingRate; // Отсчетов за секунду.
-		_header += _headerSpacing; // 1 байт на страницу.
-		if (_padding) _header += 1; // Дополнительная страница.
+			1152 
+			/ 8 
+			* _bitRate 
+			/ _samplingRate; 
+		_header += _headerSpacing; 
+		if (_padding) _header += 1; 
 	} 
 
-	return false; // Заголовок прочтен успешно.
+	return false; 
 }
 
 
@@ -277,19 +270,13 @@ static void Matrix(long* V, long* subbandSamples, int
 	for (int i = numSamples; i < 32; i++)
 		subbandSamples[i] = 0;
 	static const double PI = 3.14159265358979323846;
-	long* workR = V; // Повторное использование V в качестве
-	// рабочего хранилища.
-	long workI[64]; // Мнимая часть.
+	long* workR = V; 
+	long workI[64]; 
 	static const char order[] =
 	{ 0,16,8,24,4,20,12,28,2,18,10,26,6,22,14,30,
 	1,17,9,25,5,21,13,29,3,19,11,27,7,23,15,31 };
-	// B этой части шага инициализации
-	// производится предварительное вычисление
-	// 2-точечных преобразований (из двух входных - четыре выходных).
-	// Пользуемся тем, что у входных значений есть только
-	// действительная часть.
-	long* pWorkR = workR; // Формат 2.16.
-	long* pWorkI = workI; // Формат 2.16.
+	long* pWorkR = workR; 
+	long* pWorkI = workI; 
 	const char* next = order;
 	for (int n = 0; n < 16; n++) {
 		long a = subbandSamples[*next++];
@@ -299,16 +286,11 @@ static void Matrix(long* V, long* subbandSamples, int
 		*pWorkR++ = a - b; *pWorkI++ = 0;
 		*pWorkR++ = a; *pWorkI++ = -b;
 	}
-	// Это быстрая версия преобразования,
-	// описанного в стандарте ISO.
-	// Используются те же принципы, что и для БПФ, но наше
-	// преобразование преобразованием Фурье HE является.
-	// Для экономии времени заранее вычисляем
-	// все значения фазовых сдвигов.
-	static long phaseShiftsR[32], phaseShiftsI[32]; // 1.14.
+	
+	static long phaseShiftsR[32], phaseShiftsI[32]; 
 	static bool initializedPhaseShifts = false;
-	if (!initializedPhaseShifts) { // Однократная инициализация.
-		for (int i = 0; i < 32; i++) { // 1.14.
+	if (!initializedPhaseShifts) { 
+		for (int i = 0; i < 32; i++) { 
 			phaseShiftsR[i] = static_cast<long>(16384.0 * cos(i * (PI /
 				32.0)));
 			phaseShiftsI[i] = static_cast<long>(16384.0 * sin(i * (PI /
@@ -316,13 +298,9 @@ static void Matrix(long* V, long* subbandSamples, int
 		}
 		initializedPhaseShifts = true;
 	}
-	// При каждой итерации отбрасывается один значащий бит.
-	// B результате получаем один лишний бит,
-	// защищающий от переполнения.
+
 	int phaseShiftIndex, phaseShiftStep = 8;
 	for (int size = 4; size < 64; size <<= 1) {
-		// Так как величина первого фазового сдвига всегда равна 1,
-		// можно сократить количество операций, продублировав цикл,
 		for (int n = 0; n < 64; n += 2 * size) {
 			long tR = workR[n + size];
 			workR[n + size] = (workR[n] - tR) >> 1;
@@ -349,15 +327,13 @@ static void Matrix(long* V, long* subbandSamples, int
 		}
 		phaseShiftStep /= 2;
 	}
-	// Получаем окончательные значения V, обрабатывая
-	// полученные в результате преобразования выходные значения.
+
 	{
-		static long vShiftR[64], vShiftI[64]; // 1.13
+		static long vShiftR[64], vShiftI[64]; 
 		static bool initializedVshift = false;
 		int n;
-		if (!initializedVshift) { // Инициализируем только
-			// один раз.
-			for (n = 0; n < 32; n++) { // 1.14
+		if (!initializedVshift) { 
+			for (n = 0; n < 32; n++) { 
 				vShiftR[n] =
 					static_cast<long>(16384.0 * cos((32 + n) * (PI / 64.0)));
 				vShiftI[n] =
@@ -365,13 +341,10 @@ static void Matrix(long* V, long* subbandSamples, int
 			}
 			initializedVshift = true;
 		}
-		// Теперь получаем значения V из комплексных чисел,
-		// полученных в результате преобразований.
-		long* pcmR = workR + 33; // 6.12
-		long* pcmI = workI + 33; // 6.12
-		V[16] = 0; // V[16] всегда равно 0
-		for (n = 1; n < 32; n++) { // V - действительная
-			// часть, V имеет формат 6.9.
+		long* pcmR = workR + 33; 
+		long* pcmI = workI + 33; 
+		V[16] = 0; 
+		for (n = 1; n < 32; n++) { 
 			V[n + 16] = (vShiftR[n] * *pcmR++ - vShiftI[n] *
 				*pcmI++) >> 15;
 		}
@@ -387,11 +360,10 @@ void DecompressMpeg::Layerl2Synthesis(
 	int numSubbandSamples,
 	AudioSample* pcmSamples) {
 	long* t = V[15];
-	for (int i = 15; i > 0; i--) // Сдвигаем буферы V.
+	for (int i = 15; i > 0; i--) 
 		V[i] = V[i - 1];
 	V[0] = t;
-	// Преобразуем отсчеты поддиапазонов
-	// в отсчеты ИКМ в V[0].
+
 	Matrix(V[0], subbandSamples, numSubbandSamples);
 	static long D[512];
 	static bool initializedD = false;
@@ -404,17 +376,15 @@ void DecompressMpeg::Layerl2Synthesis(
 			}
 		initializedD = true;
 	}
-	// D имеет формат 3.12, V имеет формат 6.9, на выходе
-	// нужно 1б-битное число.
+
 	long* nextD = D;
 	for (int j = 0; j < 32; j++) {
-		long sample = 0; // 8.16
+		long sample = 0; 
 		for (int i = 0; i < 16; i += 2) {
 			sample += (*nextD++ * V[i][j]) >> 8;
 			sample += (*nextD++ * V[i + 1][j + 32]) >> 8;
 		}
-		*pcmSamples++ = sample >> 1; // Выходные отсчеты
-		// являются 16-разрядными.
+		*pcmSamples++ = sample >> 1; 
 	}
 }
 
@@ -429,27 +399,19 @@ inline long LayerlRequant(long sample, int width, int scaleIndex)
 }
 
 void DecompressMpeg::LayerlDecode() {
-	int allocation[2][32]; // Один для каждого канала
-	// и поддиапазона.
+	int allocation[2][32]; 
 	ResetBits();
 
 	if (_channels == 1) {
-		// Для монозаписи хранится одно значение распределения
-		// для каждого
-		// поддиапазона.
 		for (int sb = 0; sb < 32; sb++)
 			allocation[0][sb] = GetBits(4);
 	}
-	else { // Стереозапись слегка сложнее.
-		// Получаем независимые распределения для диапазона
-		// с полной записью стерео.
+	else {
 		int sb;
 		for (sb = 0; sb < _bound; sb++) {
 			allocation[0][sb] = GetBits(4);
 			allocation[1][sb] = GetBits(4);
 		}
-		// Получаем объединенное распределение для диапазонов
-		// интенсивности стерео.
 		for (; sb < 32; sb++) {
 			allocation[0][sb] = GetBits(4);
 			allocation[1][sb] = allocation[0][sb];
@@ -466,17 +428,15 @@ void DecompressMpeg::LayerlDecode() {
 				}
 	}
 
-	long sbSamples[2][32]; // Отсчеты.
-	for (int gr = 0; gr < 12; gr++) { // Читаем 12 групп отсчетов.
+	long sbSamples[2][32]; 
+	for (int gr = 0; gr < 12; gr++) { 
 		if (_channels == 1) {
-			for (int sb = 0; sb < 32; sb++) // Считываем группу из 32 отсчетов.
-				if (!allocation[0][sb]) // Отсутствуют биты?
+			for (int sb = 0; sb < 32; sb++) 
+				if (!allocation[0][sb]) 
 					sbSamples[0][sb] = 0;
 				else {
 					int width = allocation[0][sb] + 1;
 					long s = GetBits(width);
-					// Передискретизация
-					// и масштабирование этого отсчета.
 					sbSamples[0][sb] = LayerlRequant(s, width,
 						scaleFactor[0][sb]);
 				}
@@ -485,7 +445,7 @@ void DecompressMpeg::LayerlDecode() {
 			_samplesRemaining += 32;
 		}
 		else {
-			{ // Получаем отсчеты для поддиапазонов с полной записью стерео.
+			{ 
 				for (int sb = 0; sb < _bound; sb++)
 					for (int ch = 0; ch < 2; ch++)
 						if (!allocation[ch][sb])
@@ -497,21 +457,19 @@ void DecompressMpeg::LayerlDecode() {
 								scaleFactor[ch][sb]);
 						}
 			}
-			{ // Получаем общие отсчеты для поддиапазонов,
-			// использующих интенсивность стерео.
+			{ 
 				for (int sb = 0; sb < _bound; sb++) {
 					if (!allocation[0][sb])
 						sbSamples[0][sb] = 0;
 					else {
 						int width = allocation[0][sb] + 1;
 						long s = GetBits(width);
-						// Передискретизация и масштабирование отсчета
-						// для каждого канала.
+					
 						sbSamples[0][sb] = LayerlRequant(s, width,
 							scaleFactor[0][sb]);
 						sbSamples[1][sb] = LayerlRequant(s, width,
 							scaleFactor[1][sb]);
-						// A теперь реконструируем каждый из каналов.
+	
 						for (int ch = 0; ch < _channels; ch++) {
 							Layerl2Synthesis(_V[ch], sbSamples[ch], 32, _pcmSamples[ch]);
 							_pcmSamples[ch] += 32;
@@ -525,9 +483,9 @@ void DecompressMpeg::LayerlDecode() {
 }
 
 struct Layer2QuantClass {
-	long _levels; // Количество уровней.
-	char _bits; // Сколько битов надо прочитать.
-	bool _grouping; // Да -> нужно разложить на три выборки.
+	long _levels; 
+	char _bits; 
+	bool _grouping; 
 };
 
 inline long Layer2Requant(long sample,
@@ -579,8 +537,7 @@ struct Layer2BitAllocationTableEntry {
 	char _numberBits;
 	Layer2QuantClass** _quantClasses;
 };
-// 27 активных поддиапазонов.
-// Для моно требуется 88 бит для записи таблицы распределения.
+
 Layer2BitAllocationTableEntry Layer2AllocationB2a[32] = {
 { 4, l2allocationA }, { 4, l2allocationA }, { 4, l2allocationA },
 { 4, l2allocationB }, { 4, l2allocationB }, { 4, l2allocationB },
@@ -593,9 +550,7 @@ Layer2BitAllocationTableEntry Layer2AllocationB2a[32] = {
 { 2, l2allocationD }, { 2, l2allocationD }, { 2, l2allocationD },
 { 0,0}, { 0,0}, { 0,0}, { 0,0}, { 0,0}
 };
-// 30 активных поддиапазонов.
-// Для моно требуется 94 бита для записи таблицы распределения.
-// Использованы при самых высоких скоростях передачи.
+
 Layer2BitAllocationTableEntry Layer2AllocationB2b[32] = {
 {4, l2allocationA }, { 4, l2allocationA }, { 4, l2allocationA },
 {4, l2allocationB }, { 4, l2allocationB }, { 4, l2allocationB },
@@ -609,9 +564,7 @@ Layer2BitAllocationTableEntry Layer2AllocationB2b[32] = {
 {2, l2allocationD }, { 2, l2allocationD }, { 2, l2allocationD },
 { 0,0}, { 0,0}
 };
-// 7 активных поддиапазонов.
-// Для моно требуется 26 бит для записи таблицы распределения.
-// Использованы при самых низких скоростях передачи.
+
 Layer2BitAllocationTableEntry Layer2AllocationB2c[32] = {
 { 4, l2allocationE }, { 4, l2allocationE }, { 3,
 l2allocationE },
@@ -622,9 +575,7 @@ l2allocationE },
 {0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0} , {0,0} ,
 	{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
 };
-// 11 активных поддиапазонов.
-// Для моно требуется 38 бит для записи таблицы распределения.
-// Использованы при самых низких скоростях передачи.
+
 Layer2BitAllocationTableEntry Layer2AllocationB2d[32] = {
 { 4, l2allocationE }, { 4, l2allocationE }, { 3, l2allocationE },
 { 3, l2allocationE }, { 3, l2allocationE }, { 3, l2allocationE },
@@ -649,12 +600,12 @@ Layer2BitAllocationTableEntry Layer2AllocationB1[32] = {
 };
 
 void DecompressMpeg::Layer2Decode() {
-	int allocation[2][32]; // По одному для каждого канала
-	// и поддиапазона.
+	int allocation[2][32]; 
+
 	ResetBits();
 	Layer2BitAllocationTableEntry* allocationMap;
 	long bitRatePerChannel = _bitRate / _channels;
-	if (_id == 0) // Используем карту распределения MPEG-2
+	if (_id == 0) 
 		allocationMap = Layer2AllocationB1;
 	else if (bitRatePerChannel <= 48000) {
 		if (_samplingRate == 32000) allocationMap =
@@ -667,14 +618,9 @@ void DecompressMpeg::Layer2Decode() {
 		allocationMap = Layer2AllocationB2a;
 	else
 		allocationMap = Layer2AllocationB2b;
-	// Замечание: заголовок фрейма устанавливает
-	// _bound в 0 для одноканальных записей, поэтому
-	// предлагаемая программа корректно работает
-	// и для моно, и для стерео.
-	int sblimit = 0; // Увеличенный на 1 номер старшего поддиапазона
-	// с непустым распределением.
-	{ // Получаем отдельные распределения для полных
-	// стереоподдиапазонов.
+
+	int sblimit = 0; 
+	{ 
 		for (int sb = 0; sb < _bound; sb++) {
 			if (allocationMap[sb]._numberBits) {
 				allocation[0][sb] =
@@ -691,8 +637,7 @@ void DecompressMpeg::Layer2Decode() {
 			}
 		}
 	}
-	{ // Получаем общее распределение для поддиапазонов
-	// с интенсивностью стерео.
+	{ 
 		for (int sb = _bound; sb < 32; sb++) {
 			if (allocationMap[sb]._numberBits) {
 				allocation[0][sb] =
@@ -705,43 +650,36 @@ void DecompressMpeg::Layer2Decode() {
 		}
 	}
 
-	int scaleFactor[3][2][32];// По одному для каждого канала
-	// и поддиапазона.
+	int scaleFactor[3][2][32];
 	long sbSamples[3][2][32];
 	int scaleFactorSelection[2][32];
-	{ // Считываем информацию о расположении масштабных
-	// коэффициентов.
+	{ 
 		for (int sb = 0; sb < sblimit; sb++)
 			for (int ch = 0; ch < _channels; ch++)
 				if (allocation[ch][sb] != 0)
 					scaleFactorSelection[ch][sb] = GetBits(2);
 	}
-	{ // Считываем масштабные коэффициенты. Массив
-	// scaleFactorSelection используется для того,
-	// чтобы определить, какой коэффициент относится более чем
-	// к одной группе.
+	{ 
 		for (int sb = 0; sb < sblimit; sb++)
 			for (int ch = 0; ch < _channels; ch++)
 				if (allocation[ch][sb] != 0) {
 					switch (scaleFactorSelection[ch][sb]) {
-					case 0: // Три масштабных коэффициента.
+					case 0: 
 						scaleFactor[0][ch][sb] = GetBits(6);
 						scaleFactor[1][ch][sb] = GetBits(6);
 						scaleFactor[2][ch][sb] = GetBits(6);
 						break;
-					case 1: // Один для первых двух частей,
-						// третий - для последней.
+					case 1: 
 						scaleFactor[0][ch][sb] = GetBits(6);
 						scaleFactor[1][ch][sb] = scaleFactor[0][ch][sb];
 						scaleFactor[2][ch][sb] = GetBits(6);
 						break;
-					case 2: // Один для всех трех.
+					case 2: 
 						scaleFactor[0][ch][sb] = GetBits(6);
 						scaleFactor[1][ch][sb] = scaleFactor[0][ch][sb];
 						scaleFactor[2][ch][sb] = scaleFactor[0][ch][sb];
 						break;
-					case 3: // Один - для первой части,
-						// один - для оставшихся двух.
+					case 3: 
 						scaleFactor[0][ch][sb] = GetBits(6);
 						scaleFactor[1][ch][sb] = GetBits(6);
 						scaleFactor[2][ch][sb] = scaleFactor[1][ch][sb];
@@ -750,14 +688,10 @@ void DecompressMpeg::Layer2Decode() {
 				}
 	}
 
-	for (int sf = 0; sf < 3; sf++) { // Различные масштабные
-		// коэффициенты для
-		// каждой трети.
+	for (int sf = 0; sf < 3; sf++) { 
 		for (int gr = 0; gr < 4; gr++) {
 			for (int sb = 0; sb < sblimit; sb++) {
 				for (int ch = 0; ch < _channels; ch++) {
-					// Если обрабатывается поддиапазон интенсивности стерео,
-					// то копируем отсчеты.
 					if ((sb >= _bound) && (ch == 1)) {
 						sbSamples[0][1][sb] = sbSamples[0][0][sb];
 						sbSamples[1][1][sb] = sbSamples[1][0][sb];
@@ -769,19 +703,15 @@ void DecompressMpeg::Layer2Decode() {
 						allocationMap[sb]._quantClasses[
 							allocation[ch][sb]]
 						: 0;
-							if (!allocation[ch][sb]) { // Отсутствие битов, записываем
-								// 0 для каждого значения.
+							if (!allocation[ch][sb]) { 
 								sbSamples[0][ch][sb] = 0;
 								sbSamples[1][ch][sb] = 0;
 								sbSamples[2][ch][sb] = 0;
 							}
-							else if (quantClass->_grouping) { // Сгруппированные
-								// отсчеты.
-								long s = GetBits(quantClass->_bits); // Считываем группы.
-								// Выделяем
-								// значения,
-								// последовательно
-								// вычисляя остатки.
+							else if (quantClass->_grouping) { 
+						
+								long s = GetBits(quantClass->_bits); 
+		
 								sbSamples[0][ch][sb]
 									= Layer2Requant(s % quantClass->_levels, quantClass,
 										scaleFactor[sf][ch][sb]);
@@ -794,25 +724,23 @@ void DecompressMpeg::Layer2Decode() {
 									= Layer2Requant(s % quantClass->_levels, quantClass,
 										scaleFactor[sf][ch][sb]);
 							}
-							else { // Несгруппированные значения.
+							else { 
 								int width = quantClass->_bits;
-								long s = GetBits(width); // Первое значение.
+								long s = GetBits(width);
 								sbSamples[0][ch][sb]
 									=
 									Layer2Requant(s, quantClass, scaleFactor[sf][ch][sb]);
-								s = GetBits(width); // Второе значение.
+								s = GetBits(width); 
 								sbSamples[1][ch][sb]
 									= Layer2Requant(s, quantClass, scaleFactor[sf][ch][sb]);
-								s = GetBits(width); // Третье значение.
+								s = GetBits(width); 
 								sbSamples[2][ch][sb]
 									=
 									Layer2Requant(s, quantClass, scaleFactor[sf][ch][sb]);
 							}
 				}
 			}
-			// A теперь передаем три набора
-			// отсчетов поддиапазонов
-			// в модуль синтеза.
+
 			for (int ch = 0; ch < _channels; ch++) {
 				Layerl2Synthesis(_V[ch], sbSamples[0][ch], sblimit, _pcmSamples[ch]);
 				_pcmSamples[ch] += 32;
@@ -838,7 +766,7 @@ DecompressMpeg::DecompressMpeg(AudioAbstract& a, std::ostringstream& out)
 	_header = _bufferEnd = _buffer;
 	_headerSpacing = 0;
 
-	for (int ch = 0; ch < 2; ch++) { // V хранится внутри объекта.
+	for (int ch = 0; ch < 2; ch++) { 
 		for (int i = 0; i < 16; i++) {
 			_V[ch][i] = new long[64];
 			for (int j = 0; j < 64; j++)
@@ -854,37 +782,24 @@ DecompressMpeg::DecompressMpeg(AudioAbstract& a, std::ostringstream& out)
 		}
 	}
 
-	NextFrame(); // Читаем первый фрейм
-	// Кодировка: MPEG-.
+	NextFrame(); 
 	out << "Encoding: MPEG-" << ((_id == 0) ? "2" : "1") << "\n";
-	// Уровень.
 	out << "Layer " << static_cast<unsigned int>(_layer);
 	out << "\n";
-	// Частота дискретизации.
 	out << "Sampling Rate: " << static_cast<unsigned int>(_samplingRate) << "\n";
 	switch (_mode) {
-		// Тип: Стерео.
 	case 0: out << "Mode: Stereo\n"; break;
-		// Тип: Объединенный стерео.
 	case 1: out << "Mode: Joint Stereo\n"; break;
-		// Тип: Двухканальный.
 	case 2: out << "Mode: Dual Channel\n"; break;
-		// Тип: Одноканальный.
 	case 3: out << "Mode: Single Channel\n"; break;
 	}
-	// Скорость передачи битов.
 	out << "Bitrate: " << static_cast<unsigned int>(_bitRate) << "\n";
 	switch (_emphasis) {
-		// Предыскажение: нет.
 	case 0: out << "Emphasis: none\n"; break;
-		// Предыскажение: 50/15.
 	case 1: out << "Emphasis: 50/15\n"; break;
-		// Предыскажение: зарезервировано.
 	case 2: out << "Emphasis: reserved\n"; break;
-		// Предыскажение: ITU J.17.
 	case 3: out << "Emphasis: ITU J.17\n"; break;
 	}
-	// Степень сжатия (приблизительно):
 	out << "Approximate Compression Ratio: " << _samplingRate * 16.0 * _channels / _bitRate << "\n";
 }
 
@@ -898,14 +813,13 @@ DecompressMpeg::~DecompressMpeg() {
 }
 
 bool IsMpegFile(istream& file) {
-	file.seekg(0); // B начало файла.
+	file.seekg(0); 
 	long magic = ReadIntMsb(file, 2);
 	if ((magic & 0xFFF0) == 0xFFF0) return true;
 	else return false;
 }
 MpegRead::MpegRead(istream& input, std::ostringstream& log) :AudioAbstract(), _stream(input)
 {
-	// Формат файла: MPEG
 	log << "File Format: MPEG\n";
 	_decoder = new DecompressMpeg(*this, log);
 }

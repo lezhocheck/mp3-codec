@@ -144,6 +144,7 @@
     </ClInclude>
     <ClInclude Include="mpeg.h" />
     <ClInclude Include="open.h" />
+    <ClInclude Include="paginator.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="wav.h" />
     <ClInclude Include="winplayer.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="mpeg.cpp" />
     <ClCompile Include="open.cpp" />
+    <ClCompile Include="paginator.cpp" />
     <ClCompile Include="wav.cpp" />
     <ClCompile Include="winplayer.cpp" />
   </ItemGroup>
