@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <iostream>
+#include <sstream>
 #include "aplayer.h"
 #include "winplayer.h"
 
@@ -236,4 +237,47 @@ int WinPlayer::SelectDevice(void) {
     }
 
     return 0;
+}
+
+void WinPlayer::PrintInfo(std::ostringstream& out) {
+    // Get everyone else's idea of format
+    int channelsMin = 1, channelsMax = 2, channelsPreferred = 0;
+    long rateMin = 8000, rateMax = 44100, ratePreferred = 22050;
+
+    MinMaxChannels(&channelsMin, &channelsMax, &channelsPreferred);
+    if (channelsMin > channelsMax) {
+        cerr << "Couldn't negotiate channels.\n";
+        exit(1);
+    }
+
+    MinMaxSamplingRate(&rateMin, &rateMax, &ratePreferred);
+    if (rateMin > rateMax) {
+        cerr << "Couldn't negotiate rate.\n";
+        exit(1);
+    }
+
+    // First, try for an exact match
+    static const int NO_MATCH = 100000;
+    UINT matchingDevice = NO_MATCH;
+    WAVEFORMATEX waveFormat;
+    waveFormat.wFormatTag = WAVE_FORMAT_PCM;
+    waveFormat.nChannels = channelsPreferred;
+    waveFormat.nSamplesPerSec = ratePreferred;
+    waveFormat.wBitsPerSample = 8 * sizeof(Sample16);
+    waveFormat.nBlockAlign = waveFormat.nChannels
+        * waveFormat.wBitsPerSample / 8;
+    waveFormat.nAvgBytesPerSec = waveFormat.nBlockAlign
+        * waveFormat.nSamplesPerSec;
+    waveFormat.cbSize = 0;
+    MMRESULT err = waveOutOpen(0, WAVE_MAPPER, &waveFormat,
+        0, 0, WAVE_FORMAT_QUERY);
+
+    out << "Encoding: " << "MPEG-" << waveFormat.wFormatTag << "\n";
+    out << "Channels: " << waveFormat.nChannels << "\n";
+    out << "Samples Per Sec: " << waveFormat.nSamplesPerSec << "\n";
+    out << "Bits Per Sample: " << waveFormat.wBitsPerSample << "\n";
+    out << "Block Align: " << waveFormat.nBlockAlign << "\n";
+    out << "Average Bytes per Sec: " << waveFormat.nAvgBytesPerSec << "\n";
+
+    return;
 }

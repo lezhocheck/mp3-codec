@@ -328,6 +328,21 @@ namespace mp3_codec {
 				paginator->add("winplayer.cpp", 125, 240);
 				paginator->add("winplayer.cpp", 55, 100);
 				codeForm->SetPaginator(paginator);
+
+				//output file details
+				std::ostringstream out;
+				std::ostringstream out2;
+				std::string path = marshal_as<std::string>(textBox1->Text);
+				std::ifstream input(path, std::ios::in | std::ios::binary);
+				if (!input.is_open()) {
+					return;
+				}
+				AudioAbstract* audioFile = new MpegRead(input, out2);
+				if (audioFile) {
+					WinPlayer player(audioFile);
+					player.PrintInfo(out);
+					fileInfo->Text = gcnew String(out.str().c_str());	
+				}
 				backgroundWorker->RunWorkerAsync(textBox1->Text);
 			}
 		}

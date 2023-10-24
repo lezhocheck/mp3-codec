@@ -30,4 +30,5 @@ public:
     ~WinPlayer() {};
 
     void Play();  // Actually play the sound source
+    void PrintInfo(std::ostringstream& out);
 };
