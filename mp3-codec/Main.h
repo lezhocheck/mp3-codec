@@ -248,9 +248,14 @@ namespace mp3_codec {
 				textBox1->Text = dialog->FileName;
 				Code^ codeForm = Code::GetInstance();
 				Paginator^ paginator = gcnew Paginator("mpeg");
-				paginator->add("mpeg.cpp", 762, 804);
-				paginator->add("mpeg.cpp", 602, 756);
-				paginator->add("mpeg.cpp", 485, 601);
+				/*
+					paginator->add("mpeg.cpp", 762, 804);
+					paginator->add("mpeg.cpp", 602, 756);
+					paginator->add("mpeg.cpp", 485, 601);
+				*/
+				paginator->add("mpeg-1");
+				paginator->add("mpeg-2");
+				paginator->add("mpeg-3");
 				codeForm->SetPaginator(paginator);
 
 				std::string path = marshal_as<std::string>(textBox1->Text);
@@ -320,9 +325,14 @@ namespace mp3_codec {
 			if (!backgroundWorker->IsBusy) {
 				Code^ codeForm = Code::GetInstance();
 				Paginator^ paginator = gcnew Paginator("winplayer");
-				paginator->add("winplayer.cpp", 8, 53);
-				paginator->add("winplayer.cpp", 125, 240);
-				paginator->add("winplayer.cpp", 55, 100);
+				/*
+					paginator->add("winplayer.cpp", 8, 53);
+					paginator->add("winplayer.cpp", 125, 240);
+					paginator->add("winplayer.cpp", 55, 100);
+				*/
+				paginator->add("winplayer-1");
+				paginator->add("winplayer-2");
+				paginator->add("winplayer-3");
 				codeForm->SetPaginator(paginator);
 
 				//output file details

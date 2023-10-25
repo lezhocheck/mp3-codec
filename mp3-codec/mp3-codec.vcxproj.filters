@@ -116,5 +116,8 @@
     <EmbeddedResource Include="Resources.uk-UA.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
+    <EmbeddedResource Include="CodeResource.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

@@ -2,17 +2,18 @@
 #include "CodeScraper.h"
 
 
-void Paginator::add(String^ file, int start, int end)
+void mp3_codec::Paginator::add(String^ file)
 {
-    System::String^ path = System::IO::Directory::GetCurrentDirectory() + "/" + file;
-    if (!System::IO::File::Exists(path)) {
-        throw std::invalid_argument("Invalid file local path provided");
-    }
-    CodeScraper^ scraper = gcnew CodeScraper(path, start, end);
-    items->Add(String::Join("\n", scraper->Process()));
+    // System::String^ path = System::IO::Directory::GetCurrentDirectory() + "/" + file;
+    // if (!System::IO::File::Exists(path)) {
+    //     throw std::invalid_argument("Invalid file local path provided");
+    // }
+    // CodeScraper^ scraper = gcnew CodeScraper(path, start, end);
+    ResourceManager^ rm = gcnew ResourceManager("mp3_codec.CodeResource", GetType()->Assembly);
+    items->Add(rm->GetString(file));
 }
 
-bool Paginator::hasNext()
+bool mp3_codec::Paginator::hasNext()
 {
     if (items->Count == 0) {
         return false;
@@ -20,7 +21,7 @@ bool Paginator::hasNext()
     return currentPage < items->Count - 1;
 }
 
-bool Paginator::hasPrev()
+bool mp3_codec::Paginator::hasPrev()
 {
     if (items->Count == 0) {
         return false;
@@ -28,30 +29,30 @@ bool Paginator::hasPrev()
     return currentPage > 0;
 }
 
-void Paginator::nextPage() {
+void mp3_codec::Paginator::nextPage() {
     if (currentPage + 1 < items->Count) {
         currentPage++;
     }
 }
 
-System::String^ Paginator::getName()
+System::String^ mp3_codec::Paginator::getName()
 {
     return name;
 }
 
-void Paginator::previousPage() {
+void mp3_codec::Paginator::previousPage() {
     if (currentPage > 0) {
         currentPage--;
     }
 }
 
-System::String^ Paginator::displayCurrentPage() {
+System::String^ mp3_codec::Paginator::displayCurrentPage() {
     if (items->Count == 0) {
         return "";
     }
     return items[currentPage];
 }
 
-int Paginator::getCurrentPage(){
+int mp3_codec::Paginator::getCurrentPage(){
     return currentPage;
 }

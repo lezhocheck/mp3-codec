@@ -1,0 +1,653 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="mpeg-1" xml:space="preserve">
+    <value>DecompressMpeg::DecompressMpeg(AudioAbstract&amp; a, std::ostringstream&amp; out)
+	:AbstractDecompressor(a) {
+	_samplesRemaining = 0;
+	_buffer = _bufferStorage + sizeof(_bufferStorage);
+	_header = _bufferEnd = _buffer;
+	_headerSpacing = 0;
+
+	for (int ch = 0; ch &lt; 2; ch++) { 
+		for (int i = 0; i &lt; 16; i++) {
+			_V[ch][i] = new long[64];
+			for (int j = 0; j &lt; 64; j++)
+				_V[ch][i][j] = 0;
+		}
+	}
+
+	if (!layerlScaleFactors) {
+		layerlScaleFactors = new long[63];
+		for (int i = 0; i &lt; 63; i++) {
+			layerlScaleFactors[i] = static_cast&lt;long&gt;
+				(32767.0 * pow(2.0, 1.0 - i / 3.0));
+		}
+	}
+
+	NextFrame(); 
+	out &lt;&lt; "Encoding: MPEG-" &lt;&lt; ((_id == 0) ? "2" : "1") &lt;&lt; "\n";
+	out &lt;&lt; "Layer " &lt;&lt; static_cast&lt;unsigned int&gt;(_layer);
+	out &lt;&lt; "\n";
+	out &lt;&lt; "Sampling Rate: " &lt;&lt; static_cast&lt;unsigned int&gt;(_samplingRate) &lt;&lt; "\n";
+	switch (_mode) {
+	case 0: out &lt;&lt; "Mode: Stereo\n"; break;
+	case 1: out &lt;&lt; "Mode: Joint Stereo\n"; break;
+	case 2: out &lt;&lt; "Mode: Dual Channel\n"; break;
+	case 3: out &lt;&lt; "Mode: Single Channel\n"; break;
+	}
+	out &lt;&lt; "Bitrate: " &lt;&lt; static_cast&lt;unsigned int&gt;(_bitRate) &lt;&lt; "\n";
+	switch (_emphasis) {
+	case 0: out &lt;&lt; "Emphasis: none\n"; break;
+	case 1: out &lt;&lt; "Emphasis: 50/15\n"; break;
+	case 2: out &lt;&lt; "Emphasis: reserved\n"; break;
+	case 3: out &lt;&lt; "Emphasis: ITU J.17\n"; break;
+	}
+	out &lt;&lt; "Approximate Compression Ratio: " &lt;&lt; _samplingRate * 16.0 * _channels / _bitRate &lt;&lt; "\n";
+}</value>
+  </data>
+  <data name="mpeg-2" xml:space="preserve">
+    <value>void DecompressMpeg::Layer2Decode() {
+	int allocation[2][32]; 
+
+	ResetBits();
+	Layer2BitAllocationTableEntry* allocationMap;
+	long bitRatePerChannel = _bitRate / _channels;
+	if (_id == 0) 
+		allocationMap = Layer2AllocationB1;
+	else if (bitRatePerChannel &lt;= 48000) {
+		if (_samplingRate == 32000) allocationMap =
+			Layer2AllocationB2d;
+		else allocationMap = Layer2AllocationB2c;
+	}
+	else if (bitRatePerChannel &lt; 96000)
+		allocationMap = Layer2AllocationB2a;
+	else if (_samplingRate == 48000)
+		allocationMap = Layer2AllocationB2a;
+	else
+		allocationMap = Layer2AllocationB2b;
+
+	int sblimit = 0; 
+	{ 
+		for (int sb = 0; sb &lt; _bound; sb++) {
+			if (allocationMap[sb]._numberBits) {
+				allocation[0][sb] =
+					GetBits(allocationMap[sb]._numberBits);
+				allocation[1][sb] =
+					GetBits(allocationMap[sb]._numberBits);
+				if ((allocation[0][sb] || allocation[1][sb])
+					&amp;&amp; (sb &gt;= sblimit))
+					sblimit = sb + 1;
+			}
+			else {
+				allocation[0][sb] = 0;
+				allocation[1][sb] = 0;
+			}
+		}
+	}
+	{ 
+		for (int sb = _bound; sb &lt; 32; sb++) {
+			if (allocationMap[sb]._numberBits) {
+				allocation[0][sb] =
+					GetBits(allocationMap[sb]._numberBits);
+				if (allocation[0][sb] &amp;&amp; (sb &gt;= sblimit))
+					sblimit = sb + 1;
+			}
+			else allocation[0][sb] = 0;
+			allocation[1][sb] = allocation[0][sb];
+		}
+	}
+
+	int scaleFactor[3][2][32];
+	long sbSamples[3][2][32];
+	int scaleFactorSelection[2][32];
+	{ 
+		for (int sb = 0; sb &lt; sblimit; sb++)
+			for (int ch = 0; ch &lt; _channels; ch++)
+				if (allocation[ch][sb] != 0)
+					scaleFactorSelection[ch][sb] = GetBits(2);
+	}
+	{ 
+		for (int sb = 0; sb &lt; sblimit; sb++)
+			for (int ch = 0; ch &lt; _channels; ch++)
+				if (allocation[ch][sb] != 0) {
+					switch (scaleFactorSelection[ch][sb]) {
+					case 0: 
+						scaleFactor[0][ch][sb] = GetBits(6);
+						scaleFactor[1][ch][sb] = GetBits(6);
+						scaleFactor[2][ch][sb] = GetBits(6);
+						break;
+					case 1: 
+						scaleFactor[0][ch][sb] = GetBits(6);
+						scaleFactor[1][ch][sb] = scaleFactor[0][ch][sb];
+						scaleFactor[2][ch][sb] = GetBits(6);
+						break;
+					case 2: 
+						scaleFactor[0][ch][sb] = GetBits(6);
+						scaleFactor[1][ch][sb] = scaleFactor[0][ch][sb];
+						scaleFactor[2][ch][sb] = scaleFactor[0][ch][sb];
+						break;
+					case 3: 
+						scaleFactor[0][ch][sb] = GetBits(6);
+						scaleFactor[1][ch][sb] = GetBits(6);
+						scaleFactor[2][ch][sb] = scaleFactor[1][ch][sb];
+						break;
+					}
+				}
+	}
+
+	for (int sf = 0; sf &lt; 3; sf++) { 
+		for (int gr = 0; gr &lt; 4; gr++) {
+			for (int sb = 0; sb &lt; sblimit; sb++) {
+				for (int ch = 0; ch &lt; _channels; ch++) {
+					if ((sb &gt;= _bound) &amp;&amp; (ch == 1)) {
+						sbSamples[0][1][sb] = sbSamples[0][0][sb];
+						sbSamples[1][1][sb] = sbSamples[1][0][sb];
+						sbSamples[2][1][sb] = sbSamples[2][0][sb];
+						continue;
+					}
+					Layer2QuantClass* quantClass
+						= allocationMap[sb]._quantClasses ?
+						allocationMap[sb]._quantClasses[
+							allocation[ch][sb]]
+						: 0;
+							if (!allocation[ch][sb]) { 
+								sbSamples[0][ch][sb] = 0;
+								sbSamples[1][ch][sb] = 0;
+								sbSamples[2][ch][sb] = 0;
+							}
+							else if (quantClass-&gt;_grouping) { 
+						
+								long s = GetBits(quantClass-&gt;_bits); 
+		
+								sbSamples[0][ch][sb]
+									= Layer2Requant(s % quantClass-&gt;_levels, quantClass,
+										scaleFactor[sf][ch][sb]);
+								s /= quantClass-&gt;_levels;
+								sbSamples[1][ch][sb]
+									= Layer2Requant(s % quantClass-&gt;_levels, quantClass,
+										scaleFactor[sf][ch][sb]);
+								s /= quantClass-&gt;_levels;
+								sbSamples[2][ch][sb]
+									= Layer2Requant(s % quantClass-&gt;_levels, quantClass,
+										scaleFactor[sf][ch][sb]);
+							}
+							else { 
+								int width = quantClass-&gt;_bits;
+								long s = GetBits(width);
+								sbSamples[0][ch][sb]
+									=
+									Layer2Requant(s, quantClass, scaleFactor[sf][ch][sb]);
+								s = GetBits(width); 
+								sbSamples[1][ch][sb]
+									= Layer2Requant(s, quantClass, scaleFactor[sf][ch][sb]);
+								s = GetBits(width); 
+								sbSamples[2][ch][sb]
+									=
+									Layer2Requant(s, quantClass, scaleFactor[sf][ch][sb]);
+							}
+				}
+			}
+
+			for (int ch = 0; ch &lt; _channels; ch++) {
+				Layerl2Synthesis(_V[ch], sbSamples[0][ch], sblimit, _pcmSamples[ch]);
+				_pcmSamples[ch] += 32;
+				Layerl2Synthesis(_V[ch], sbSamples[1][ch], sblimit, _pcmSamples[ch]);
+				_pcmSamples[ch] += 32;
+				Layerl2Synthesis(_V[ch], sbSamples[2][ch], sblimit, _pcmSamples[ch]);
+				_pcmSamples[ch] += 32;
+			}
+			_samplesRemaining += 96;
+		}
+	}
+}</value>
+  </data>
+  <data name="mpeg-3" xml:space="preserve">
+    <value>struct Layer2QuantClass {
+	long _levels; 
+	char _bits; 
+	bool _grouping; 
+};
+
+inline long Layer2Requant(long sample,
+	Layer2QuantClass* quantClass,
+	int scaleIndex) {
+	long levels = quantClass-&gt;_levels;
+	return (layerlScaleFactors[scaleIndex] *
+		(((sample + sample + 1 - levels) &lt;&lt; 15) / levels)
+		) &gt;&gt; 14;
+}
+
+static Layer2QuantClass l2qc3 = { 3,5,true };
+static Layer2QuantClass l2qc5 = { 5,7,true };
+static Layer2QuantClass l2qc7 = { 7,3,false };
+static Layer2QuantClass l2qc9 = { 9,10,true };
+static Layer2QuantClass l2qc15 = { 15,4,false };
+static Layer2QuantClass l2qc31 = { 31,5,false };
+static Layer2QuantClass l2qc63 = { 63,6,false };
+static Layer2QuantClass l2qc127 = { 127,7,false };
+static Layer2QuantClass l2qc255 = { 255,8,false };
+static Layer2QuantClass l2qc511 = { 511,9,false };
+static Layer2QuantClass l2qc1023 = { 1023,10,false };
+static Layer2QuantClass l2qc2047 = { 2047,11,false };
+static Layer2QuantClass l2qc4095 = { 4095,12,false };
+static Layer2QuantClass l2qc8191 = { 8191,13,false };
+static Layer2QuantClass l2qc16383 = { 16383,14,false };
+static Layer2QuantClass l2qc32767 = { 32767,15,false };
+static Layer2QuantClass l2qc65535 = { 65535,16,false };
+
+Layer2QuantClass* l2allocationA[] = { 0,&amp;l2qc3,&amp;l2qc7,&amp;l2qc15,
+&amp;l2qc31,&amp;l2qc63,&amp;l2qc127,&amp;l2qc255,&amp;l2qc511,&amp;l2qc1023,&amp;l2qc2047,
+&amp;l2qc4095,&amp;l2qc8191,&amp;l2qc16383,&amp;l2qc32767,&amp;l2qc65535 };
+Layer2QuantClass * l2allocationB[] =
+{ 0,&amp;l2qc3,&amp;l2qc5,&amp;l2qc7,&amp;l2qc9,
+&amp;l2qc15,&amp;l2qc31,&amp;l2qc63,&amp;l2qc127,&amp;l2qc255,&amp;l2qc511,&amp;l2qc1023,&amp;l2qc2047,
+&amp;l2qc4095,&amp;l2qc8191,&amp;l2qc65535 };
+Layer2QuantClass * l2allocationC[] = { 0,&amp;l2qc3,&amp;l2qc5,&amp;l2qc7,
+&amp;l2qc9,&amp;l2qc15,&amp;l2qc31,&amp;l2qc65535 };
+Layer2QuantClass* l2allocationD[] = { 0,&amp;l2qc3,&amp;l2qc5,&amp;l2qc65535 };
+Layer2QuantClass* l2allocationE[] = { 0,&amp;l2qc3,&amp;l2qc5,&amp;l2qc9,
+&amp;l2qc15,&amp;l2qc31,&amp;l2qc63,&amp;l2qc127,&amp;l2qc255,&amp;l2qc511,&amp;l2qc1023,&amp;l2qc2047,
+&amp;l2qc4095,&amp;l2qc8191,&amp;l2qc16383,&amp;l2qc32767 };
+Layer2QuantClass* l2allocationF[] =
+{ 0,&amp;l2qc3,&amp;l2qc5,&amp;l2qc7,&amp;l2qc9,
+&amp;l2qc15,&amp;l2qc31,&amp;l2qc63,&amp;l2qc127,&amp;l2qc255,&amp;l2qc511,&amp;l2qc1023,&amp;l2qc2047,
+&amp;l2qc4095,&amp;l2qc8191,&amp;l2qc16383 };
+
+struct Layer2BitAllocationTableEntry {
+	char _numberBits;
+	Layer2QuantClass** _quantClasses;
+};
+
+Layer2BitAllocationTableEntry Layer2AllocationB2a[32] = {
+{ 4, l2allocationA }, { 4, l2allocationA }, { 4, l2allocationA },
+{ 4, l2allocationB }, { 4, l2allocationB }, { 4, l2allocationB },
+{ 4, l2allocationB }, { 4, l2allocationB }, { 4, l2allocationB },
+{ 4, l2allocationB }, { 4, l2allocationB }, { 3, l2allocationC },
+{ 3, l2allocationC }, { 3, l2allocationC }, { 3, l2allocationC },
+{ 3, l2allocationC }, { 3, l2allocationC }, { 3, l2allocationC },
+{ 3, l2allocationC }, { 3, l2allocationC }, { 3, l2allocationC },
+{ 3, l2allocationC }, { 3, l2allocationC }, { 2, l2allocationD },
+{ 2, l2allocationD }, { 2, l2allocationD }, { 2, l2allocationD },
+{ 0,0}, { 0,0}, { 0,0}, { 0,0}, { 0,0}
+};
+
+Layer2BitAllocationTableEntry Layer2AllocationB2b[32] = {
+{4, l2allocationA }, { 4, l2allocationA }, { 4, l2allocationA },
+{4, l2allocationB }, { 4, l2allocationB }, { 4, l2allocationB },
+{4, l2allocationB }, { 4, l2allocationB }, { 4, l2allocationB },
+{4, l2allocationB }, { 4, l2allocationB }, { 3, l2allocationC },
+{3, l2allocationC }, { 3, l2allocationC }, { 3, l2allocationC },
+{3, l2allocationC }, { 3, l2allocationC }, { 3, l2allocationC },
+{3, l2allocationC }, { 3, l2allocationC }, { 3, l2allocationC },
+{3, l2allocationC }, { 3, l2allocationC }, { 2, l2allocationD },
+{2, l2allocationD }, { 2, l2allocationD }, { 2, l2allocationD },
+{2, l2allocationD }, { 2, l2allocationD }, { 2, l2allocationD },
+{ 0,0}, { 0,0}
+};
+
+Layer2BitAllocationTableEntry Layer2AllocationB2c[32] = {
+{ 4, l2allocationE }, { 4, l2allocationE }, { 3,
+l2allocationE },
+{ 3, l2allocationE }, { 3, l2allocationE }, { 3,
+l2allocationE },
+{ 3, l2allocationE }, { 3, l2allocationE },
+{0,0},{0,0},{0,0},{0,0} , {0,0} , {0,0} , {0,0} , {0,0} ,
+{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0} , {0,0} ,
+	{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+};
+
+Layer2BitAllocationTableEntry Layer2AllocationB2d[32] = {
+{ 4, l2allocationE }, { 4, l2allocationE }, { 3, l2allocationE },
+{ 3, l2allocationE }, { 3, l2allocationE }, { 3, l2allocationE },
+{ 3, l2allocationE }, { 3, l2allocationE }, { 3, l2allocationE },
+{ 3, l2allocationE }, { 3, l2allocationE }, { 3, l2allocationE },
+{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+};
+
+Layer2BitAllocationTableEntry Layer2AllocationB1[32] = {
+{ 4, l2allocationF }, { 4, l2allocationF }, { 4, l2allocationF },
+{ 4, l2allocationF }, { 3, l2allocationE }, { 3, l2allocationE },
+{ 3, l2allocationE }, { 3, l2allocationE }, { 3, l2allocationE },
+{ 3, l2allocationE }, { 3, l2allocationE }, { 2, l2allocationE },
+{ 2, l2allocationE }, { 2, l2allocationE }, { 2, l2allocationE },
+{ 2, l2allocationE }, { 2, l2allocationE }, { 2, l2allocationE },
+{ 2, l2allocationE }, { 2, l2allocationE }, { 2, l2allocationE },
+{ 2, l2allocationE }, { 2, l2allocationE }, { 2, l2allocationE },
+{ 2, l2allocationE }, { 2, l2allocationE }, { 2, l2allocationE },
+{ 2, l2allocationE }, { 2, l2allocationE }, { 2, l2allocationE },
+{0,0},{0,0}
+};</value>
+  </data>
+  <data name="winplayer-1" xml:space="preserve">
+    <value>void WinPlayer::Play(void) {
+    if (SelectDevice()) return; // Open a suitable device
+    waveOutPause(_device); // Don't start playing yet
+    _paused = true;
+
+    InitializeQueue(128 * 1024L); // Allocate 128k queue
+
+    WAVEHDR waveHdr[2];
+    for (int i = 0; i &lt; 2; i++) {
+        waveHdr[i].dwBufferLength  // Size in bytes
+            = winBufferSize * _sampleWidth / 8;
+        waveHdr[i].dwFlags = 0;
+        waveHdr[i].dwLoops = 0;
+        waveHdr[i].lpData
+            = reinterpret_cast&lt;LPSTR&gt;(
+                new BYTE[waveHdr[i].dwBufferLength * Channels()]);
+        waveOutPrepareHeader(_device, &amp;waveHdr[i], sizeof(waveHdr[i]));
+        NextBuff(&amp;waveHdr[i]); // Fill and write buffer to output
+    }
+
+    // Wait until finished and both buffers become free
+    _paused = false;
+    waveOutRestart(_device); // Start playing now
+    while (!_endOfQueue  // queue empty??
+        || ((waveHdr[0].dwFlags &amp; WHDR_DONE) == 0) // buffers finished?
+        || ((waveHdr[1].dwFlags &amp; WHDR_DONE) == 0)) {
+        FillQueue(); // Top off the queue
+        if (_paused) { // If server thread paused, restart it
+            _paused = false;
+            cerr &lt;&lt; "Sound output restarted.\n";
+            waveOutRestart(_device);
+        }
+        Sleep(50 /* ms */); // Loop about 20 times a second
+    }
+
+    MMRESULT err = waveOutClose(_device);
+    while (err == WAVERR_STILLPLAYING) { // If it's still playing...
+        Sleep(250); // Wait for a bit...
+        waveOutClose(_device); // try again...
+    };
+
+    for (int i1 = 0; i1 &lt; 2; i1++) {
+        waveOutUnprepareHeader(_device, &amp;waveHdr[i1], sizeof(waveHdr[i1]));
+        delete[] waveHdr[i1].lpData;
+    }
+}</value>
+  </data>
+  <data name="winplayer-2" xml:space="preserve">
+    <value>// Negotiate the sound format and open a suitable output device
+// 
+int WinPlayer::SelectDevice(void) {
+    // Get everyone else's idea of format
+    int channelsMin = 1, channelsMax = 2, channelsPreferred = 0;
+    long rateMin = 8000, rateMax = 44100, ratePreferred = 22050;
+
+    MinMaxChannels(&amp;channelsMin, &amp;channelsMax, &amp;channelsPreferred);
+    if (channelsMin &gt; channelsMax) {
+        cerr &lt;&lt; "Couldn't negotiate channels.\n";
+        exit(1);
+    }
+
+    MinMaxSamplingRate(&amp;rateMin, &amp;rateMax, &amp;ratePreferred);
+    if (rateMin &gt; rateMax) {
+        cerr &lt;&lt; "Couldn't negotiate rate.\n";
+        exit(1);
+    }
+
+    // First, try for an exact match
+    static const int NO_MATCH = 100000;
+    UINT matchingDevice = NO_MATCH;
+    WAVEFORMATEX waveFormat;
+    waveFormat.wFormatTag = WAVE_FORMAT_PCM;
+    waveFormat.nChannels = channelsPreferred;
+    waveFormat.nSamplesPerSec = ratePreferred;
+    waveFormat.wBitsPerSample = 8 * sizeof(Sample16);
+    waveFormat.nBlockAlign = waveFormat.nChannels
+        * waveFormat.wBitsPerSample / 8;
+    waveFormat.nAvgBytesPerSec = waveFormat.nBlockAlign
+        * waveFormat.nSamplesPerSec;
+    waveFormat.cbSize = 0;
+    MMRESULT err = waveOutOpen(0, WAVE_MAPPER, &amp;waveFormat,
+        0, 0, WAVE_FORMAT_QUERY);
+
+    if (err == 0) {
+        matchingDevice = WAVE_MAPPER;
+        channelsMax = channelsMin = channelsPreferred;
+        rateMax = rateMin = ratePreferred;
+        _sampleWidth = 16;
+    }
+    else {
+        cerr &lt;&lt; "WinPlay: Custom format failed, ";
+        cerr &lt;&lt; "trying standard formats.\n";
+    }
+
+    // Get count of available devices
+    UINT numDevs = waveOutGetNumDevs();
+    if (numDevs == 0) {
+        cerr &lt;&lt; "No sound output devices found!?\n";
+        exit(1);
+    }
+
+    // Check each available device
+    for (UINT i = 0; (i &lt; numDevs) &amp;&amp; (matchingDevice == NO_MATCH); i++) {
+        // What formats does this device support?
+        WAVEOUTCAPS waveOutCaps;
+        MMRESULT err =
+            waveOutGetDevCaps(i, &amp;waveOutCaps, sizeof(waveOutCaps));
+        if (err != MMSYSERR_NOERROR) {
+            cerr &lt;&lt; "Couldn't get capabilities of device " &lt;&lt; i &lt;&lt; "\n";
+            continue;
+        }
+        // Check each standard format
+        for (UINT j = 0; winFormats[j].format != 0; j++) {
+            if ((winFormats[j].format &amp; waveOutCaps.dwFormats) // supported?
+                &amp;&amp; (rateMin &lt;= winFormats[j].rate) // Rate ok?
+                &amp;&amp; (rateMax &gt;= winFormats[j].rate)
+                &amp;&amp; (channelsMin &lt;= winFormats[j].channels) // channels ok?
+                &amp;&amp; (channelsMax &gt;= winFormats[j].channels)) {
+
+                // Set up my parameters
+                matchingDevice = i;
+                rateMin = rateMax = ratePreferred = winFormats[j].rate;
+                channelsPreferred = winFormats[j].channels;
+                channelsMin = channelsMax = channelsPreferred;
+                _sampleWidth = winFormats[j].width;
+
+                // Set up WAVEFORMATEX structure accordingly
+                waveFormat.wFormatTag = WAVE_FORMAT_PCM;
+                waveFormat.nChannels = winFormats[j].channels;
+                waveFormat.nSamplesPerSec = winFormats[j].rate;
+                waveFormat.wBitsPerSample = winFormats[j].width;
+                waveFormat.nBlockAlign = waveFormat.wBitsPerSample / 8
+                    * waveFormat.nChannels;
+                waveFormat.nAvgBytesPerSec = waveFormat.nBlockAlign
+                    * waveFormat.nSamplesPerSec;
+                waveFormat.cbSize = 0;
+            }
+        }
+    }
+
+    if (matchingDevice == NO_MATCH) {
+        cerr &lt;&lt; "Can't handle this sound format.\n";
+        cerr &lt;&lt; "Rate: " &lt;&lt; rateMin &lt;&lt; "-" &lt;&lt; rateMax &lt;&lt; "\n";
+        cerr &lt;&lt; "Channels: " &lt;&lt; channelsMin &lt;&lt; "-" &lt;&lt; channelsMax &lt;&lt; "\n";
+        return 1;
+    }
+
+    // If we found a match, set everything
+    SetChannelsRecursive(channelsPreferred);
+    SetSamplingRateRecursive(ratePreferred);
+
+    // Open the matching device
+
+    MMRESULT err2 = waveOutOpen(&amp;_device, matchingDevice,
+        &amp;waveFormat, reinterpret_cast&lt;DWORD_PTR&gt;(WaveOutCallback),
+        reinterpret_cast&lt;DWORD_PTR&gt;(this), CALLBACK_FUNCTION);
+
+    if (err2) {
+        cerr &lt;&lt; "Couldn't open WAVE output device.\n";
+        exit(1);
+    }
+
+    return 0;
+}</value>
+  </data>
+  <data name="winplayer-3" xml:space="preserve">
+    <value>// CallBack
+void CALLBACK WaveOutCallback(HWAVEOUT hwo, UINT uMsg,
+    DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
+    WinPlayer* me = reinterpret_cast&lt;WinPlayer*&gt;(dwInstance);
+    switch (uMsg) {
+    case WOM_DONE: // Done with this buffer
+    {
+        WAVEHDR* pWaveHdr = reinterpret_cast&lt;WAVEHDR*&gt;(dwParam1);
+        me-&gt;NextBuff(pWaveHdr);
+        break;
+    }
+    default:
+        break;
+    }
+}
+void WinPlayer::NextBuff(WAVEHDR* pWaveHdr) {
+    long samplesRead = 0;
+    switch (_sampleWidth) {
+    case 16:
+        samplesRead = FromQueue(
+            reinterpret_cast&lt;Sample16*&gt;(pWaveHdr-&gt;lpData),
+            winBufferSize);
+        break;
+    case 8:
+        samplesRead = FromQueue(
+            reinterpret_cast&lt;Sample8*&gt;(pWaveHdr-&gt;lpData),
+            winBufferSize);
+        break;
+    }
+    if (samplesRead != 0) {  // I got data, so write it
+        pWaveHdr-&gt;dwBufferLength = samplesRead * _sampleWidth / 8;
+        waveOutWrite(_device, pWaveHdr, sizeof(*pWaveHdr));
+    }
+    else if (!_endOfQueue) { // Whoops! Source couldn't keep up
+        waveOutPause(_device); // pause the output
+        _paused = true;
+        cerr &lt;&lt; "Sound output paused due to lack of data.\n";
+        // Write some zeros to keep this block in Windows' queue
+        memset(pWaveHdr-&gt;lpData, 0, winBufferSize);
+        pWaveHdr-&gt;dwBufferLength = 256;
+        waveOutWrite(_device, pWaveHdr, sizeof(*pWaveHdr));
+    }
+    else { // No data, everything's done.
+        pWaveHdr-&gt;dwFlags |= WHDR_DONE; // Mark buffer as finished
+    }
+}</value>
+  </data>
+</root>
