@@ -12,10 +12,31 @@ void Paginator::add(String^ file, int start, int end)
     items->Add(String::Join("\n", scraper->Process()));
 }
 
+bool Paginator::hasNext()
+{
+    if (items->Count == 0) {
+        return false;
+    }
+    return currentPage < items->Count - 1;
+}
+
+bool Paginator::hasPrev()
+{
+    if (items->Count == 0) {
+        return false;
+    }
+    return currentPage > 0;
+}
+
 void Paginator::nextPage() {
     if (currentPage + 1 < items->Count) {
         currentPage++;
     }
+}
+
+System::String^ Paginator::getName()
+{
+    return name;
 }
 
 void Paginator::previousPage() {
@@ -25,6 +46,9 @@ void Paginator::previousPage() {
 }
 
 System::String^ Paginator::displayCurrentPage() {
+    if (items->Count == 0) {
+        return "";
+    }
     return items[currentPage];
 }
 

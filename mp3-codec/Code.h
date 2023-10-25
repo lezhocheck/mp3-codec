@@ -24,11 +24,7 @@ namespace mp3_codec {
 		Code(void)
 		{
 			InitializeComponent();
-			paginator = gcnew Paginator();
-			paginator->add("mpeg.cpp", 762, 804);
-			paginator->add("mpeg.cpp", 602, 756);
-			paginator->add("mpeg.cpp", 485, 601);
-			textBox->Text = paginator->displayCurrentPage();
+			SetPaginator(gcnew Paginator("code"));
 		}
 
 		static Code^ GetInstance()
@@ -42,7 +38,10 @@ namespace mp3_codec {
 
 		void SetPaginator(Paginator^ paginator) {
 			this->paginator = paginator;
+			this->Text = paginator->getName();
 			textBox->Text = paginator->displayCurrentPage();
+			nextButton->Enabled = paginator->hasNext();
+			prevButton->Enabled = paginator->hasPrev();
 		}
 
 	protected:
@@ -63,8 +62,8 @@ namespace mp3_codec {
 		/// </summary>
 		System::ComponentModel::Container ^components;
 	private: System::Windows::Forms::RichTextBox^ textBox;
-	private: System::Windows::Forms::Button^ nextButton;
-	private: System::Windows::Forms::Button^ prevButton;
+	public: System::Windows::Forms::Button^ nextButton;
+	public: System::Windows::Forms::Button^ prevButton;
 
 		   static Code^ instance = nullptr;
 
@@ -135,10 +134,14 @@ namespace mp3_codec {
 	System::Void nextButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		paginator->nextPage();
 		textBox->Text = paginator->displayCurrentPage();
+		nextButton->Enabled = paginator->hasNext();
+		prevButton->Enabled = paginator->hasPrev();
 	}
 	System::Void prevButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		paginator->previousPage();
 		textBox->Text = paginator->displayCurrentPage();
+		nextButton->Enabled = paginator->hasNext();
+		prevButton->Enabled = paginator->hasPrev();
 	}
 };
 }

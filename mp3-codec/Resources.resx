@@ -135,11 +135,17 @@
   <data name="language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="next" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="open" xml:space="preserve">
     <value>Open</value>
   </data>
   <data name="playMpeg" xml:space="preserve">
     <value>Play MPEG file</value>
+  </data>
+  <data name="prev" xml:space="preserve">
+    <value>Previous</value>
   </data>
   <data name="saveWav" xml:space="preserve">
     <value>Save WAV file</value>

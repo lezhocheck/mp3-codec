@@ -47,7 +47,7 @@ namespace mp3_codec {
 		}
 	private: System::Windows::Forms::MenuStrip^ menuStrip1;
 	protected:
-	private: System::Windows::Forms::ToolStripMenuItem^ fileToolStripMenuItem;
+
 	private: System::Windows::Forms::ToolStripMenuItem^ languageToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ englishToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ ukrainianToolStripMenuItem;
@@ -81,7 +81,6 @@ namespace mp3_codec {
 		void InitializeComponent(void)
 		{
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
-			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->codeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->languageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->englishToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -97,21 +96,15 @@ namespace mp3_codec {
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
-				this->fileToolStripMenuItem,
-					this->codeToolStripMenuItem, this->languageToolStripMenuItem, this->exitToolStripMenuItem
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->codeToolStripMenuItem,
+					this->languageToolStripMenuItem, this->exitToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
 			this->menuStrip1->Size = System::Drawing::Size(284, 24);
 			this->menuStrip1->TabIndex = 0;
 			this->menuStrip1->Text = L"menuStrip1";
-			// 
-			// fileToolStripMenuItem
-			// 
-			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
-			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
-			this->fileToolStripMenuItem->Text = L"File";
 			// 
 			// codeToolStripMenuItem
 			// 
@@ -254,9 +247,10 @@ namespace mp3_codec {
 			{
 				textBox1->Text = dialog->FileName;
 				Code^ codeForm = Code::GetInstance();
-				Paginator^ paginator = gcnew Paginator();
-				paginator->add("wav.cpp", 217, 234);
-				paginator->add("wav.cpp", 26, 52);
+				Paginator^ paginator = gcnew Paginator("mpeg");
+				paginator->add("mpeg.cpp", 762, 804);
+				paginator->add("mpeg.cpp", 602, 756);
+				paginator->add("mpeg.cpp", 485, 601);
 				codeForm->SetPaginator(paginator);
 
 				std::string path = marshal_as<std::string>(textBox1->Text);
@@ -285,15 +279,17 @@ namespace mp3_codec {
 		}
 
 		void SetupResources() {
+			Code^ codeForm = Code::GetInstance();
 			ResourceManager^ rm = gcnew ResourceManager("mp3_codec.Resources", GetType()->Assembly);
 			codeToolStripMenuItem->Text = rm->GetString("code");
-			fileToolStripMenuItem->Text = rm->GetString("file");
 			languageToolStripMenuItem->Text = rm->GetString("language");
 			exitToolStripMenuItem->Text = rm->GetString("exit");
 			englishToolStripMenuItem->Text = rm->GetString("english");
 			ukrainianToolStripMenuItem->Text = rm->GetString("ukrainian");
 			button1->Text = rm->GetString("open");
 			button2->Text = rm->GetString("playMpeg");
+			codeForm->nextButton->Text = rm->GetString("next");
+			codeForm->prevButton->Text = rm->GetString("prev");
 		}
 
 		
@@ -323,8 +319,8 @@ namespace mp3_codec {
 		System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 			if (!backgroundWorker->IsBusy) {
 				Code^ codeForm = Code::GetInstance();
-				Paginator^ paginator = gcnew Paginator();
-				paginator->add("winplayer.cpp", 7, 53);
+				Paginator^ paginator = gcnew Paginator("winplayer");
+				paginator->add("winplayer.cpp", 8, 53);
 				paginator->add("winplayer.cpp", 125, 240);
 				paginator->add("winplayer.cpp", 55, 100);
 				codeForm->SetPaginator(paginator);
